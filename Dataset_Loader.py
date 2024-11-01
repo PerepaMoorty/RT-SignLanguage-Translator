@@ -26,7 +26,8 @@ train_data_tensor = torch.tensor(extract_train_data, dtype=torch.float32)
 test_label_tensor = torch.tensor(extract_test_labels, dtype=torch.long)
 test_data_tensor = torch.tensor(extract_test_data, dtype=torch.float32)
 
-print("Training Data: ", train_data_tensor.shape)
-print("Training Labels: ", train_label_tensor.shape)
-print("testing Data: ", test_data_tensor.shape)
-print("Testing Labels: ", test_label_tensor.shape)
+def Show_Tensor_Shape():
+    print("Training Data: ", train_data_tensor.shape)
+    print("Training Labels: ", train_label_tensor.shape)
+    print("testing Data: ", test_data_tensor.shape)
+    print("Testing Labels: ", test_label_tensor.shape)
