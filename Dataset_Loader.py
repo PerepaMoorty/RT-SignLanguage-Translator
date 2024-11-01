@@ -4,7 +4,6 @@ import torch
 
 # Downloading the dataset 
 dataset_path = kag.dataset_download('datamunge/sign-language-mnist')
-print("Path of the downloaded dataset: ", dataset_path)
 
 # Reading the .CSV Files for both training and testing datasets [using pandas]
 train_dataset_csv = pd.read_csv(dataset_path + '/sign_mnist_train.csv')
@@ -22,9 +21,12 @@ extract_test_data = test_dataset_csv.iloc[:, 1:].values
 # Training Data
 train_label_tensor = torch.tensor(extract_train_labels, dtype=torch.long)
 train_data_tensor = torch.tensor(extract_train_data, dtype=torch.float32)
+train_data_tensor = train_data_tensor.view(-1, 28, 28)
+
 # Testing Data
 test_label_tensor = torch.tensor(extract_test_labels, dtype=torch.long)
 test_data_tensor = torch.tensor(extract_test_data, dtype=torch.float32)
+test_data_tensor = test_data_tensor.view(-1, 28, 28)
 
 def Show_Tensor_Shape():
     print("Training Data: ", train_data_tensor.shape)
