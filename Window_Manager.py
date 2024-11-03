@@ -1,8 +1,7 @@
 import pygame
 from Window_Constants_Definition import *
 from Neural_Network_Trainer import Trainer
-
-# def Within_Button_Bounds(button_position_x, button_position_y, button_width, button_height):
+from sign_detection import start_sign_detection  # Import the sign detection function
 
 def main():
     # Initializing Pygame
@@ -29,7 +28,7 @@ def main():
     button_position_y1 = screen_height * (6 / 8) - button_height / 2
     button_text1 = FONT_JETBRAINS_TEXT.render('Start Program', True, COLOR_TITLE)
 
-    # Button Dimensions - Start Program
+    # Button Dimensions - Retrain Model
     button_position_x2 = screen_width * (2.5 / 3.5) - button_width / 2
     button_position_y2 = screen_height * (6 / 8) - button_height / 2
     button_text2 = FONT_JETBRAINS_TEXT.render('Retrain Model', True, COLOR_TITLE)
@@ -42,14 +41,15 @@ def main():
             # Getting the Mouse Positions
             mouse_x, mouse_y = pygame.mouse.get_pos()
             
-            # Quiting program after closing window
+            # Quitting program after closing window
             if event.type == pygame.QUIT:
                 exit = True
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if button_position_x1 < mouse_x < button_position_x1 + button_width and button_position_y1 < mouse_y < button_position_y1 + button_height:
                     print('Program Started!')
+                    start_sign_detection()  # Start the sign detection process
                 elif button_position_x2 < mouse_x < button_position_x2 + button_width and button_position_y2 < mouse_y < button_position_y2 + button_height:
-                    Trainer()
+                    Trainer()  # Call Trainer to retrain the model
 
         # Printing the Title Text
         screen.blit(text_title, (screen_width / 2 - text_title.get_size()[0] / 2, (screen_height / 5)))
@@ -68,6 +68,5 @@ def main():
         
         # Updating the screen each frame
         pygame.display.update()
-        
 
 main()
