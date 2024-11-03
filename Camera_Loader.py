@@ -18,5 +18,4 @@ def Pre_Process_Frame(frame):
     # Converting the frame to a PyTorch Tensor
     processed_frame_tensor = torch.tensor(processed_frame)
     
-    
     return processed_frame_tensor
