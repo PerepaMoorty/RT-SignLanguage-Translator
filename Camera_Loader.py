@@ -4,24 +4,18 @@ import torch
 # Getting the Video Capture through the Webcam
 camera_capture = cv.VideoCapture(0)
 
-def Frame_Reader():
-    isTrue, frame = camera_capture.read()   # Reading each Frame
-    if not isTrue:
-        return None  # Return None if the frame isn't captured properly
-    return frame
+def Frame_Reader(camera_capture):  # Accept camera_capture as an argument
+    isTrue, frame = camera_capture.read()  # Reading each Frame
+    return frame if isTrue else None
 
 def Pre_Process_Frame(frame):
     # Pre-Processing each frame
-    processed_frame = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)  # Convert to grayscale
-    processed_frame = cv.flip(processed_frame, 1)  # Flip the frame horizontally
+    processed_frame = cv.cvtColor(frame, cv.COLOR_RGB2GRAY)
+    processed_frame = cv.flip(processed_frame, 1)
 
-    # Resize the frame to 28x28
-    processed_frame = cv.resize(processed_frame, (28, 28))
+    # Converting the frame to a PyTorch Tensor
+    processed_frame_tensor = torch.tensor(processed_frame, dtype=torch.float32)  # Ensure proper type
+    processed_frame_tensor = processed_frame_tensor / 255.0  # Normalize to [0, 1] range
+    processed_frame_tensor = processed_frame_tensor.unsqueeze(0)  # Add batch dimension
 
-    # Normalize the pixel values (0-1 range)
-    processed_frame = processed_frame / 255.0
-
-    # Convert the frame to a PyTorch Tensor and add a batch dimension
-    processed_frame_tensor = torch.tensor(processed_frame, dtype=torch.float32).unsqueeze(0)  # Add batch dimension
-
-    return processed_frame_tensor  # Return the pre-processed tensor frame
+    return processed_frame_tensor
