@@ -40,7 +40,7 @@ def Load_And_Eval():
     model.model.load_state_dict(torch.load('Trained_Model.pth')) if os.path.exists('Trained_Model.pth') else None
     
     # Error check if Trained Model doesn't exist
-    if model == None: 
+    if model is None: 
         print("Trained Model doesn't exist! Training Models now!")
         Train_And_Save()      
         Load_And_Eval()
@@ -53,5 +53,25 @@ def Load_And_Eval():
     capture = cv.VideoCapture(0)
     prediction = Neural_Network.Evaluate(model, Pre_Process_Frame(Frame_Reader(capture)))
     
-    # Displaying the Prediction
-    Display_Prediction(prediction)
+    while True:
+        frame = Frame_Reader(capture)  # Read frame from the camera
+        if frame is None:
+            break  # Break if there is an issue with the camera
+
+        # Preprocess the frame for the model
+        processed_frame = Pre_Process_Frame(frame)
+        
+        # Display the prediction
+        prediction = model.Evaluate(processed_frame)
+        Display_Prediction(prediction)
+
+
+        # Display the camera feed
+        cv.imshow('Camera Feed', frame)  # Show the camera feed window
+
+        # Break the loop if 'q' is pressed
+        if cv.waitKey(1) & 0xFF == ord('q'):
+            break
+
+    capture.release()
+    cv.destroyAllWindows()
