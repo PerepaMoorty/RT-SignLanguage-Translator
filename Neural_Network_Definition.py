@@ -91,9 +91,11 @@ class Neural_Network:
         return accuracy
         
     def Evaluate(self, data_tensor):
-        self.model.eval()
-        
+        # Converting the Tensor to use GPU if available      
         data_tensor = data_tensor.to(self.device)
+        
+        # Processing the Tensor data to be able to run through the Neural Network
+        # ...
         
         with torch.no_grad():
             prediction = self.model(data_tensor)

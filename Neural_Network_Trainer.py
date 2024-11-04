@@ -37,7 +37,7 @@ def Train_And_Save():
 def Load_And_Eval():
     # Loading the Model
     model = Neural_Network(10, 0.001, 64)
-    model = model.model.load_state_dict('Trained_Model.pth') if os.path.exists('Trained_Model.pth') else None
+    model.model.load_state_dict(torch.load('Trained_Model.pth')) if os.path.exists('Trained_Model.pth') else None
     
     # Error check if Trained Model doesn't exist
     if model == None: 
@@ -47,7 +47,7 @@ def Load_And_Eval():
         return
     
     # Setting the Model into Evaluation mode
-    model.eval()
+    model.model.eval()
     
     # Getting Data from Camera
     capture = cv.VideoCapture(0)
