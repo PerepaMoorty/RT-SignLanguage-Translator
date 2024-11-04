@@ -91,15 +91,21 @@ class Neural_Network:
         return accuracy
         
     def Evaluate(self, data_tensor):
-        # Converting the Tensor to use GPU if available      
+        # Convert the input data tensor to use GPU if available
         data_tensor = data_tensor.to(self.device)
-        
-        # Processing the Tensor data to be able to run through the Neural Network
-        # ...
-        
+
+        # Ensure the tensor is in the correct shape (1, 1, 28, 28)
+        if data_tensor.dim() == 2:  # Check if it's 2D (28, 28)
+            data_tensor = data_tensor.unsqueeze(0).unsqueeze(0)  # Shape becomes (1, 1, 28, 28)
+        elif data_tensor.dim() == 3:
+            data_tensor = data_tensor.unsqueeze(0)
+
+        # Normalize the tensor to the range [0, 1] if it hasn't been normalized
+        data_tensor = data_tensor.float() / 255.0  # Ensure it's a float tensor and normalize
+
         with torch.no_grad():
             prediction = self.model(data_tensor)
             predicted_label = torch.argmax(prediction, dim=1).item()
             predicted_letter = self.class_to_letter[predicted_label]
-            
+        
         return predicted_letter

@@ -7,7 +7,8 @@ def Frame_Reader(camera_capture):  # Accept camera_capture as an argument
 
 def Pre_Process_Frame(frame):
     # Pre-Processing each frame
-    processed_frame = cv.cvtColor(frame, cv.COLOR_RGB2GRAY)
+    processed_frame = cv.resize(frame, (28, 28))
+    processed_frame = cv.cvtColor(processed_frame, cv.COLOR_RGB2GRAY)
     processed_frame = cv.flip(processed_frame, 1)
 
     # Converting the frame to a PyTorch Tensor
