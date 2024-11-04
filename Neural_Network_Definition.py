@@ -46,6 +46,9 @@ class Neural_Network:
         self.criterion = torch.nn.CrossEntropyLoss()
         self.optimizer = torch.optim.NAdam(self.model.parameters(), lr=self.learning_rate)
         
+        # Mapping output class to letters
+        self.class_to_letter = {i: chr(65 + i) for i in range(25)}  # A-Z (excluding one letter if 25 classes)
+        
     def Train_Model(self, train_data_tensor, train_label_tensor):
         # Batching the Input Tensors
         train_data_tensor = train_data_tensor.to(self.device)
@@ -81,8 +84,20 @@ class Neural_Network:
         test_data_tensor = test_data_tensor.to(self.device)
         test_label_tensor = test_label_tensor.to(self.device)
         
-        with torch.no_grad():   # DIsbaling Gradient Calculation
+        with torch.no_grad():   # Disbaling Gradient Calculation
             data_tensor, label_tensor = test_data_tensor.clone().detach().unsqueeze(1), test_label_tensor.clone().detach()
             accuracy = (torch.argmax(self.model(data_tensor), dim=1) == label_tensor).float().mean().item()
             
         return accuracy
+        
+    def Evaluate(self, data_tensor):
+        self.model.eval()
+        
+        data_tensor = data_tensor.to(self.device)
+        
+        with torch.no_grad():
+            prediction = self.model(data_tensor)
+            predicted_label = torch.argmax(prediction, dim=1).item()
+            predicted_letter = self.class_to_letter[predicted_label]
+            
+        return predicted_letter

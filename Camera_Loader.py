@@ -1,9 +1,6 @@
 import cv2 as cv
 import torch
 
-# Getting the Video Capture through the Webcam
-camera_capture = cv.VideoCapture(0)
-
 def Frame_Reader(camera_capture):  # Accept camera_capture as an argument
     isTrue, frame = camera_capture.read()  # Reading each Frame
     return frame if isTrue else None
@@ -19,3 +16,6 @@ def Pre_Process_Frame(frame):
     processed_frame_tensor = processed_frame_tensor.unsqueeze(0)  # Add batch dimension
 
     return processed_frame_tensor
+
+def Display_Prediction(prediction):
+    print(prediction)
