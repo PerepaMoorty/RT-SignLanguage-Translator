@@ -1,8 +1,7 @@
 import pygame
 from Window_Constants_Definition import *
 from Neural_Network_Trainer import Trainer
-
-# def Within_Button_Bounds(button_position_x, button_position_y, button_width, button_height):
+from sign_detection import start_sign_detection  # Import the sign detection function
 
 def main():
     # Initializing Pygame
@@ -29,10 +28,10 @@ def main():
     button_position_y1 = screen_height * (6 / 8) - button_height / 2
     button_text1 = FONT_JETBRAINS_TEXT.render('Start Program', True, COLOR_TITLE)
 
-    # Button Dimensions - Start Program
+    # Button Dimensions - Start Sign Detection
     button_position_x2 = screen_width * (2.5 / 3.5) - button_width / 2
     button_position_y2 = screen_height * (6 / 8) - button_height / 2
-    button_text2 = FONT_JETBRAINS_TEXT.render('Retrain Model', True, COLOR_TITLE)
+    button_text2 = FONT_JETBRAINS_TEXT.render('Sign Detection', True, COLOR_TITLE)
 
     # Program Polling Loop
     while not exit:        
@@ -42,14 +41,16 @@ def main():
             # Getting the Mouse Positions
             mouse_x, mouse_y = pygame.mouse.get_pos()
             
-            # Quiting program after closing window
+            # Quitting program after closing window
             if event.type == pygame.QUIT:
                 exit = True
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 if button_position_x1 < mouse_x < button_position_x1 + button_width and button_position_y1 < mouse_y < button_position_y1 + button_height:
                     print('Program Started!')
+                    Trainer()  # This starts training
                 elif button_position_x2 < mouse_x < button_position_x2 + button_width and button_position_y2 < mouse_y < button_position_y2 + button_height:
-                    Trainer()
+                    print('Starting Sign Detection...')
+                    start_sign_detection()  # This will start the camera and detection
 
         # Printing the Title Text
         screen.blit(text_title, (screen_width / 2 - text_title.get_size()[0] / 2, (screen_height / 5)))
@@ -60,7 +61,7 @@ def main():
         screen.blit(button_text1, 
                     (button_position_x1 + (button_width - button_text1.get_width()) / 2, button_position_y1 + (button_height - button_text1.get_height()) / 2))
                 
-        # Retrain Model Button
+        # Sign Detection Button
         color_button_2 = COLOR_BUTTON_HOVER if button_position_x2 < mouse_x < button_position_x2 + button_width and button_position_y2 < mouse_y < button_position_y2 + button_height else COLOR_BUTTON_IDLE
         pygame.draw.rect(screen, color_button_2, (button_position_x2, button_position_y2, button_width, button_height))
         screen.blit(button_text2, 
@@ -68,6 +69,5 @@ def main():
         
         # Updating the screen each frame
         pygame.display.update()
-        
 
 main()

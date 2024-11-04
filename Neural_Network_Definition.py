@@ -82,7 +82,7 @@ class Neural_Network:
         test_label_tensor = test_label_tensor.to(self.device)
         
         with torch.no_grad():   # DIsbaling Gradient Calculation
-            data_tensor, label_tensor = torch.tensor(test_data_tensor).unsqueeze(1), torch.tensor(test_label_tensor)
+            data_tensor, label_tensor = test_data_tensor.clone().detach().unsqueeze(1), test_label_tensor.clone().detach()
             accuracy = (torch.argmax(self.model(data_tensor), dim=1) == label_tensor).float().mean().item()
             
         return accuracy
