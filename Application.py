@@ -51,10 +51,14 @@ while not exit:
         if event.type == pygame.MOUSEBUTTONDOWN:
             if button_position_x1 < mouse_x < button_position_x1 + button_width and button_position_y1 < mouse_y < button_position_y1 + button_height:
                 # Trainer which trains the models and saves a file
+                screen = pygame.display.set_mode((screen_width, screen_height), flags=pygame.HIDDEN)
                 Train_And_Save()
+                screen = pygame.display.set_mode((screen_width, screen_height), flags=pygame.SHOWN)
             elif button_position_x2 < mouse_x < button_position_x2 + button_width and button_position_y2 < mouse_y < button_position_y2 + button_height:
                 # Loading and Evaluating the Model
+                screen = pygame.display.set_mode((screen_width, screen_height), flags=pygame.HIDDEN)
                 Load_And_Eval()
+                screen = pygame.display.set_mode((screen_width, screen_height), flags=pygame.SHOWN)
 
     # Printing the Title Text
     screen.blit(text_title, (screen_width / 2 - text_title.get_size()[0] / 2, (screen_height / 5)))
