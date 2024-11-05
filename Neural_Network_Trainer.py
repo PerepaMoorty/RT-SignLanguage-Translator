@@ -1,6 +1,6 @@
 import os, time, torch
 import cv2 as cv
-from Camera_Loader import Frame_Reader, Pre_Process_Frame, Display_Prediction
+from Camera_Loader import Frame_Reader, Pre_Process_Frame
 from Dataset_Loader import train_data_tensor, train_label_tensor, test_data_tensor, test_label_tensor
 from Neural_Network_Definition import Neural_Network
 
@@ -39,6 +39,8 @@ def Load_And_Eval():
     model = Neural_Network(10, 0.001, 64)
     model.model.load_state_dict(torch.load('Trained_Model.pth')) if os.path.exists('Trained_Model.pth') else None
     
+    print(model.Test_Model(test_data_tensor, test_label_tensor))
+    
     # Error check if Trained Model doesn't exist
     if model is None: 
         print("Trained Model doesn't exist! Training Models now!")
@@ -51,7 +53,7 @@ def Load_And_Eval():
     
     # Getting Data from Camera
     capture = cv.VideoCapture(0)
-    prediction = Neural_Network.Evaluate(model, Pre_Process_Frame(Frame_Reader(capture)))
+    # prediction = Neural_Network.Evaluate(model, Pre_Process_Frame(Frame_Reader(capture)))
     
     while True:
         frame = Frame_Reader(capture)  # Read frame from the camera
@@ -63,8 +65,7 @@ def Load_And_Eval():
         
         # Display the prediction
         prediction = model.Evaluate(processed_frame)
-        Display_Prediction(prediction)
-
+        print(prediction)
 
         # Display the camera feed
         cv.imshow('Camera Feed', frame)  # Show the camera feed window

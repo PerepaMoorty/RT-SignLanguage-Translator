@@ -17,6 +17,3 @@ def Pre_Process_Frame(frame):
     processed_frame_tensor = processed_frame_tensor.unsqueeze(0)  # Add batch dimension
 
     return processed_frame_tensor
-
-def Display_Prediction(prediction):
-    print(prediction)
