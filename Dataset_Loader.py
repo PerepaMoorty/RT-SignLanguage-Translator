@@ -2,12 +2,12 @@ import kagglehub as kag
 import pandas as pd
 import torch
 
-# Downloading the dataset 
-dataset_path = kag.dataset_download('datamunge/sign-language-mnist')
+# Downloading the dataset
+dataset_path = kag.dataset_download("datamunge/sign-language-mnist")
 
 # Reading the .CSV Files for both training and testing datasets [using pandas]
-train_dataset_csv = pd.read_csv(dataset_path + '/sign_mnist_train.csv')
-test_dataset_csv = pd.read_csv(dataset_path + '/sign_mnist_test.csv')
+train_dataset_csv = pd.read_csv(dataset_path + "/sign_mnist_train.csv")
+test_dataset_csv = pd.read_csv(dataset_path + "/sign_mnist_test.csv")
 
 # Extracting the Label and Pixel Information from the .CSV Files
 # Training Data
@@ -27,6 +27,7 @@ train_data_tensor = train_data_tensor.view(-1, 28, 28)
 test_label_tensor = torch.tensor(extract_test_labels, dtype=torch.long)
 test_data_tensor = torch.tensor(extract_test_data, dtype=torch.float32)
 test_data_tensor = test_data_tensor.view(-1, 28, 28)
+
 
 def Show_Tensor_Shape():
     print("Training Data: ", train_data_tensor.shape)
