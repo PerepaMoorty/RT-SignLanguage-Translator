@@ -4,7 +4,7 @@ from Camera_Loader import Frame_Reader, Pre_Process_Frame
 from Dataset_Loader import train_data_tensor, train_label_tensor, test_data_tensor, test_label_tensor
 from Neural_Network_Definition import Neural_Network
 
-MODEL_COUNT = 25
+MODEL_COUNT = 32
 models = []
 models_accuracy = []
 
@@ -26,20 +26,43 @@ def Train_And_Save():
     model_index = models_accuracy.index(max(models_accuracy))
 
     # Re-Testing the Accurate Model
-    print(f'The most accurate model\'s index is: {model_index}\n')
-    print(f'The accuracy is: {models_accuracy[model_index]:.4f}')
+    print(f'The most accurate model\'s number is: {model_index + 1}\n')
+    print(f'The accuracy is: {models_accuracy[model_index] * 100}%')
     print(f'The retested accuracy is: {models[model_index].Test_Model(test_data_tensor, test_label_tensor):.4f}')
 
-    # Save the model after training
-    torch.save(models[model_index].model.state_dict(), 'Trained_Model.pth')
-    print(f'\nModel {model_index + 1} has been saved.')
+    # Checking already saved model
+    if os.path.exists('Trained_Model.pth'):
+        # Loading the Model
+        saved_model = Neural_Network(10, 0.001, 64)
+        saved_model.model.load_state_dict(torch.load('Trained_Model.pth', weights_only=True))
+
+        # Comparing Accuracies 
+        if saved_model.Test_Model(test_data_tensor, test_label_tensor) < models[model_index].Test_Model(test_data_tensor, test_label_tensor):
+            torch.save(models[model_index].model.state_dict(), 'Trained_Model.pth')
+            print(f'\n\nModel {model_index + 1} has been saved.')
+            print(f'Saved Model Accuracy: {saved_model.Test_Model(test_data_tensor, test_label_tensor) * 100}%')  
+        else:          
+            print(f'\n\nSaved Model Accuracy: {saved_model.Test_Model(test_data_tensor, test_label_tensor) * 100}%')  
+            print('Saved Model has higher accuracy. Aborting Save of new models')  
+    else:
+        # Save the model after training
+            torch.save(models[model_index].model.state_dict(), 'Trained_Model.pth')
+            print(f'\n\nModel {model_index + 1} has been saved.')
+    
+    # Releasing Loaded Model 
+    del saved_model
+
         
 def Load_And_Eval():
     # Loading the Model
     model = Neural_Network(10, 0.001, 64)
     model.model.load_state_dict(torch.load('Trained_Model.pth')) if os.path.exists('Trained_Model.pth') else None
     
-    print(model.Test_Model(test_data_tensor, test_label_tensor))
+    # Clearing Console
+    os.system('cls' if os.name == 'nt' else 'clear')
+    
+    # Re-Testing Saved Model' accuracys 
+    print(f'Saved Model Accuracy: {model.Test_Model(test_data_tensor, test_label_tensor) * 100}%')
     
     # Error check if Trained Model doesn't exist
     if model is None: 
