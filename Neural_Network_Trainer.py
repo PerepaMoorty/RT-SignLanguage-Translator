@@ -9,7 +9,7 @@ from Dataset_Loader import (
 )
 from Neural_Network_Definition import Neural_Network
 
-MODEL_COUNT = 32
+MODEL_COUNT = 2
 models = []
 models_accuracy = []
 
