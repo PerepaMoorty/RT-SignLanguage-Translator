@@ -106,25 +106,31 @@ class Neural_Network:
         return accuracy
 
     def Evaluate(self, data_tensor):
-        # Convert the input data tensor to use GPU if available
+        # Move the data tensor to the correct device (CPU or GPU)
         data_tensor = data_tensor.to(self.device)
 
-        # Ensure the tensor is in the correct shape (1, 1, 28, 28)
-        if data_tensor.dim() == 2:  # Check if it's 2D (28, 28)
-            data_tensor = data_tensor.unsqueeze(0).unsqueeze(
-                0
-            )  # Shape becomes (1, 1, 28, 28)
+        # Ensure the tensor has the shape (1, 1, 28, 28) by adding dimensions as needed
+        if data_tensor.dim() == 2:
+            data_tensor = data_tensor.unsqueeze(0).unsqueeze(0)  # Shape: (1, 1, 28, 28)
         elif data_tensor.dim() == 3:
-            data_tensor = data_tensor.unsqueeze(0)
+            data_tensor = data_tensor.unsqueeze(
+                0
+            )  # Shape: (1, 1, 28, 28) for single-channel images
 
-        # Normalize the tensor to the range [0, 1] if it hasn't been normalized
-        data_tensor = (
-            data_tensor.float() / 255.0
-        )  # Ensure it's a float tensor and normalize
+        # Normalize the tensor to [0, 1] assuming the values are in [0, 255]
+        data_tensor = data_tensor.float() / 255.0
 
+        # Set the model to evaluation mode
+        self.model.eval()
+
+        # Disable gradient computation as it's not needed for evaluation
         with torch.no_grad():
+            # Perform prediction and get the index of the highest logit score
             prediction = self.model(data_tensor)
             predicted_label = torch.argmax(prediction, dim=1).item()
+
+            # Map the predicted label to the corresponding letter
             predicted_letter = self.class_to_letter[predicted_label]
+            print(self.class_to_letter)
 
         return predicted_letter

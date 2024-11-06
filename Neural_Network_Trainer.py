@@ -67,9 +67,6 @@ def Train_And_Save():
         torch.save(models[model_index].model.state_dict(), "Trained_Model.pth")
         print(f"\n\nModel {model_index + 1} has been saved.")
 
-    # Releasing Loaded Model
-    del saved_model
-
 
 def Load_And_Eval():
     # Loading the Model
