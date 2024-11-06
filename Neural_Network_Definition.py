@@ -131,6 +131,5 @@ class Neural_Network:
 
             # Map the predicted label to the corresponding letter
             predicted_letter = self.class_to_letter[predicted_label]
-            print(self.class_to_letter)
 
         return predicted_letter
